@@ -1,0 +1,67 @@
+from PySide6.QtWidgets import (
+    QDialog, QVBoxLayout, QFormLayout, QLineEdit, QComboBox, QCheckBox,
+    QDialogButtonBox, QMessageBox, QFileDialog, QPlainTextEdit
+)
+
+class AccountDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Add GitHub account")
+        self.setMinimumWidth(440)
+        layout = QVBoxLayout(self)
+        form = QFormLayout()
+        self.label = QLineEdit()
+        self.token = QLineEdit()
+        self.token.setEchoMode(QLineEdit.Password)
+        self.token.setPlaceholderText("ghp_… or github_pat_…")
+        form.addRow("Account label", self.label)
+        form.addRow("Personal access token", self.token)
+        layout.addLayout(form)
+        buttons = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+
+class PublishDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Publish folder to GitHub")
+        self.setMinimumWidth(460)
+        layout = QVBoxLayout(self)
+        form = QFormLayout()
+        self.name = QLineEdit()
+        self.description = QLineEdit()
+        self.visibility = QComboBox()
+        self.visibility.addItems(["Private", "Public"])
+        self.account = QComboBox()
+        form.addRow("Repository name", self.name)
+        form.addRow("Description", self.description)
+        form.addRow("Visibility", self.visibility)
+        form.addRow("GitHub account", self.account)
+        layout.addLayout(form)
+        buttons = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+
+class ReleaseDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Create GitHub Release")
+        self.setMinimumWidth(500)
+        layout = QVBoxLayout(self)
+        form = QFormLayout()
+        self.tag = QLineEdit("v1.0.0")
+        self.title = QLineEdit()
+        self.notes = QPlainTextEdit()
+        self.notes.setPlaceholderText("Release notes…")
+        self.prerelease = QCheckBox("Mark as prerelease")
+        form.addRow("Tag", self.tag)
+        form.addRow("Title", self.title)
+        layout.addLayout(form)
+        layout.addWidget(self.notes)
+        layout.addWidget(self.prerelease)
+        buttons = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
